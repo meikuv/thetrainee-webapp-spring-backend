@@ -85,6 +85,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/v1/vacancy/**").permitAll()
                 .antMatchers("/api/v1/vacancy/companyVacancy/**").permitAll()
                 .antMatchers("/api/v1/vacancy/delete/**").permitAll()
+                .antMatchers("/api/v1/vacancy/update/**").permitAll()
                 .antMatchers("/api/v1/vacancy/respond/**").permitAll()
                 .antMatchers("/api/v1/vacancy/respondResult/**").permitAll()
                 .antMatchers("/api/v1/resume/createResume/**").permitAll()

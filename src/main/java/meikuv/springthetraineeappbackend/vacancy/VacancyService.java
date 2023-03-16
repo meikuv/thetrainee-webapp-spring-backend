@@ -34,4 +34,18 @@ public class VacancyService {
     public void deleteVacancyById(Long id) {
         vacancyRepository.deleteById(id);
     }
+
+    public void update(Vacancy req, Long id) {
+        Vacancy vacancy = vacancyRepository.findById(id).get();
+
+        vacancy.setUsername(req.getUsername());
+        vacancy.setCity(req.getCity());
+        vacancy.setCompanyName(req.getCompanyName());
+        vacancy.setJobName(req.getJobName());
+        vacancy.setConditions(req.getConditions());
+        vacancy.setDependencies(req.getDependencies());
+        vacancy.setRequirements(req.getRequirements());
+        vacancy.setBasicSkills(req.getBasicSkills());
+        vacancyRepository.save(vacancy);
+    }
 }

@@ -56,7 +56,7 @@ public class AuthController {
 
         if (!user.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new MessageResponse("User not found with username:"  + loginRequest.getUsername()));
+                    .body(new MessageResponse("User not found with username: "  + loginRequest.getUsername()));
         }
 
         if (!encoder.matches(loginRequest.getPassword(), user.get().getPassword())) {

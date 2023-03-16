@@ -7,8 +7,7 @@ import meikuv.springthetraineeappbackend.payload.request.CreateVacancyRequest;
 import meikuv.springthetraineeappbackend.payload.request.RespondResultRequest;
 import meikuv.springthetraineeappbackend.payload.request.RespondVacancyRequest;
 import meikuv.springthetraineeappbackend.payload.response.MessageResponse;
-import meikuv.springthetraineeappbackend.vacancy.models.Respond;
-import meikuv.springthetraineeappbackend.vacancy.models.Vacancy;
+import meikuv.springthetraineeappbackend.vacancy.models.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,20 +51,20 @@ public class VacancyController {
 
         Optional<User> user = userRepository.findByUsername(request.getUsername());
         if (user.isPresent() && Objects.equals(username, request.getUsername())) {
-            Optional<Respond> respond = respondRepository.existsByUserId(user.get().getId(), request.getVacancyId());
+            Optional<Respond> respond = respondRepository.existsByUserId(user.get().getId(), request.getVacancyId(), request.getResumeId());
             if (respond.isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new MessageResponse("You are already responded !"));
             }
 
             Respond newRespond = new Respond(
-                    request.getVacancyId(),
-                    request.getCompanyName(),
-                    user.get().getId(),
-                    request.getUsername(),
-                    request.getResumeId(),
-                    request.getJobName(),
-                    LocalDateTime.now()
+                        request.getVacancyId(),
+                        request.getCompanyName(),
+                        user.get().getId(),
+                        request.getUsername(),
+                        request.getResumeId(),
+                        request.getJobName(),
+                        LocalDateTime.now()
                     );
             respondRepository.save(newRespond);
 
@@ -108,8 +107,8 @@ public class VacancyController {
         return vacancyService.getAllVacancy();
     }
 
-    @GetMapping(path = "/{id}")
     @Transactional
+    @GetMapping(path = "/{id}")
     public Optional<Vacancy> getVacancyById(@PathVariable(name = "id") Long id) {
         Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (Objects.equals(principle.toString(), "anonymousUser")) {
@@ -137,5 +136,18 @@ public class VacancyController {
         }
 
         vacancyService.deleteVacancyById(id);
+    }
+
+    @PutMapping(path = "/update/{id}")
+    public ResponseEntity<MessageResponse> updateVacancy(@RequestBody CreateVacancyRequest createVacancyRequest, @PathVariable Long id) {
+        Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (Objects.equals(principle.toString(), "anonymousUser")) {
+            throw new UsernameNotFoundException("You are not logged in !");
+        }
+
+        vacancyService.update(createVacancyRequest.getVacancy(), id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new MessageResponse("Update successfully !"));
     }
 }

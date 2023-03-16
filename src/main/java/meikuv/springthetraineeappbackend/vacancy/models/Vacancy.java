@@ -1,10 +1,6 @@
 package meikuv.springthetraineeappbackend.vacancy.models;
 
 import lombok.*;
-import meikuv.springthetraineeappbackend.vacancy.models.BasicSkill;
-import meikuv.springthetraineeappbackend.vacancy.models.Condition;
-import meikuv.springthetraineeappbackend.vacancy.models.Dependency;
-import meikuv.springthetraineeappbackend.vacancy.models.Requirement;
 
 import javax.persistence.*;
 import java.util.List;

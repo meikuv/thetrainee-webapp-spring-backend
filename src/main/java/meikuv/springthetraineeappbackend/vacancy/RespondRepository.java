@@ -15,8 +15,9 @@ import java.util.Optional;
 @Transactional
 public interface RespondRepository extends JpaRepository<Respond, Long> {
 
-    @Query("SELECT r FROM Respond r WHERE r.userId = :userId and r.vacancyId = :vacancyId")
-    Optional<Respond> existsByUserId(@Param("userId") Long userId, @Param("vacancyId") Long vacancyId);
+    @Query("SELECT r FROM Respond r WHERE r.userId = :userId and r.vacancyId = :vacancyId and r.resumeId = :resumeId")
+    Optional<Respond> existsByUserId(@Param("userId") Long userId,
+                                     @Param("vacancyId") Long vacancyId, @Param("resumeId") Long resumeId);
 
     @Modifying
     @Query("UPDATE Respond r " +
